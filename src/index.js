@@ -3,17 +3,37 @@ import ReactDOM from 'react-dom'
 import io from 'socket.io-client'
 
 
+let userLocation = [];
+
+var options = {
+  enableHighAccuracy: false,
+  timeout: 5000,
+};
+
+function success(pos) {
+  userLocation =[pos.coords.latitude, pos.coords.longitude];
+  console.log(userLocation)
+};
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+};
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+
+
 
 class App extends React.Component {
   constructor (props) {
     super(props)
-
 
     this.state = {
       messages: [] }
   }
 
   componentDidMount () {
+
+
     this.socket = io('/')
     this.socket.on('message', message => {
       this.setState({ messages: [message, ...this.state.messages] })
@@ -26,7 +46,7 @@ class App extends React.Component {
       const message = {
         body,
         from: 'Me',
-        location
+
       }
       this.setState({ messages: [message, ...this.state.messages] })
       this.socket.emit('message', body)
@@ -36,7 +56,7 @@ class App extends React.Component {
 
   render () {
     const messages = this.state.messages.map((message, index) => {
-      return <li key={index}><b>{message.from}:</b>{message.body}</li>
+      return <li key={index}><b>{message.from}:</b>{message.body} {message.location}, </li>
     })
     return (
       <div>
