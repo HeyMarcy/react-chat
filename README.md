@@ -2,8 +2,8 @@
 
 ## ToDos:
 
-• get userLocation into message or somehow reference it in the message.
-• put on Heroku
+• get userLocation into message or somehow reference it in the message. <br>
+• put on Heroku <br>
 
 
 ## Usage
