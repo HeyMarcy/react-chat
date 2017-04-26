@@ -3,7 +3,7 @@
 ## ToDos:
 
 • get userLocation into message or somehow reference it in the message. <br>
-• put on Heroku <br>
+• deploy remotely  - trouble with heroku -buids ok,but error when served. <br>
 
 
 ## Usage
