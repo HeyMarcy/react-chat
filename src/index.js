@@ -8,32 +8,28 @@ let userLocation = [];
 var options = {
   enableHighAccuracy: false,
   timeout: 5000,
+  maximumAge: 0
 };
 
 function success(pos) {
-  userLocation =[pos.coords.latitude, pos.coords.longitude];
+  userLocation = [pos.coords.latitude, pos.coords.longitude];
   console.log(userLocation)
 };
 
 function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 };
-navigator.geolocation.getCurrentPosition(success, error, options);
-
-
 
 
 class App extends React.Component {
   constructor (props) {
     super(props)
-
+    navigator.geolocation.getCurrentPosition(success, error, options);
     this.state = {
       messages: [] }
   }
 
   componentDidMount () {
-
-
     this.socket = io('/')
     this.socket.on('message', message => {
       this.setState({ messages: [message, ...this.state.messages] })
