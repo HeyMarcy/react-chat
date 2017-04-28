@@ -2,19 +2,24 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import io from 'socket.io-client'
 
+// GET USER LOCATION
 
-let userLocation = [];
+let latitude;
+let longitude;
 
 var options = {
   enableHighAccuracy: false,
-  timeout: 5000,
+  // timeout: 10000,
   maximumAge: 0
 };
 
 function success(pos) {
-  userLocation = [pos.coords.latitude, pos.coords.longitude];
-  console.log(userLocation)
+   latitude = pos.coords.latitude;
+   longitude = pos.coords.longitude;
+  return latitude, longitude;
 };
+////// end LOCATION
+
 
 function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -30,7 +35,10 @@ class App extends React.Component {
 
   componentDidMount () {
     this.socket = io('/')
+    this.socket.lat = latitude
+    this.socket.lon = longitude
     this.socket.on('message', message => {
+      console.log("socket.id", this.socket.id)
       this.setState({ messages: [message, ...this.state.messages] })
     })
   }
@@ -40,8 +48,11 @@ class App extends React.Component {
     if (event.keyCode === 13 && body) {
       const message = {
         body,
-        from: 'Me'
+        from: 'Me',
+        lat: latitude,
+        lon: longitude
       }
+      console.log(message.lat, message.lon)
       this.setState({ messages: [message, ...this.state.messages] })
       this.socket.emit('message', body)
       event.target.value = ''
@@ -50,7 +61,8 @@ class App extends React.Component {
 
   render () {
     const messages = this.state.messages.map((message, index) => {
-      return <li key={index}><b>{message.from}:</b>{message.body} {message.location}, </li>
+      console.log( "from: ", message.from, "lat:", message.lat, " lat:", message.lon)
+      return <li key={index}><b>{message.from}:</b>{message.body}  </li>
     })
     return (
       <div>
