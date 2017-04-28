@@ -20,7 +20,6 @@ function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 };
 
-
 class App extends React.Component {
   constructor (props) {
     super(props)
@@ -41,8 +40,7 @@ class App extends React.Component {
     if (event.keyCode === 13 && body) {
       const message = {
         body,
-        from: 'Me',
-
+        from: 'Me'
       }
       this.setState({ messages: [message, ...this.state.messages] })
       this.socket.emit('message', body)
